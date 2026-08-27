@@ -21,6 +21,16 @@ app.get('/todos', (req, res) => {
   res.status(200).json(todos); // Send array as JSON
 });
 
+app.get('/todos/active', (req, res) => {
+  res.status(200).json(todos.filter((todo) => !todo.completed));
+});
+
+app.get('/todos/:id', (req, res) => {
+  const todo = todos.find((item) => item.id === parseInt(req.params.id));
+  if (!todo) return res.status(404).json({ message: 'Todo not found' });
+  res.status(200).json(todo);
+});
+
 // POST New – Create
 app.post('/todos', createTodoValidator, (req, res) => {
   const newTodo = { id: todos.length + 1, ...req.body }; // Auto-ID
